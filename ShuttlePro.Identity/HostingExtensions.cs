@@ -2,7 +2,6 @@ using Duende.IdentityServer;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using ShuttlePro.Identity;
 using ShuttlePro.Identity.Pages.Admin.ApiScopes;
 using ShuttlePro.Identity.Pages.Admin.Clients;
 using ShuttlePro.Identity.Pages.Admin.IdentityScopes;
@@ -33,7 +32,7 @@ namespace ShuttlePro.Identity
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                 })
                 // this is something you will want in production to reduce load on and requests to the DB
                 //.AddConfigurationStoreCache()
@@ -42,8 +41,8 @@ namespace ShuttlePro.Identity
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-                });
+                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                }).AddServerSideSessions();
 
             builder.Services.AddAuthentication()
                 .AddGoogle(options =>
